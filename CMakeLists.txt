@@ -284,3 +284,29 @@ endif()
 if (TCNN_BUILD_BENCHMARK)
 	add_subdirectory("benchmarks/image")
 endif()
+
+###############################################################################
+# Unit Tests with Boost
+# In the command prompt and in the user's build directory, do
+# cmake .. -DTCNN_BUILD_TESTS=ON <other options and parameters...>
+# otherwise, this will default to not building the unit tests.
+###############################################################################
+
+option(TCNN_BUILD_TESTS "Build unit tests for tiny-cuda-nn?" OFF)
+
+if (TCNN_BUILD_TESTS)
+    # Ensure Boost is available
+    set(BOOST_MIN_VERSION "1.65.0")
+    if (ALLOW_NEWER_BOOST)
+        find_package(Boost)
+    else()
+        find_package(Boost ${BOOST_MIN_VERSION} REQUIRED)
+    endif()
+
+    # Include Boost headers
+    include_directories(${Boost_INCLUDE_DIRS})
+
+    # Here you can add subdirectories or specific CMake instructions
+    # to build your tests, for example:
+    add_subdirectory(UnitTests)
+endif()
